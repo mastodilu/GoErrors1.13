@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"os"
 )
 
@@ -40,28 +40,27 @@ func main() {
 	fmt.Println("errors.Is(err, err3)")
 	bo = errors.Is(err, err3)
 	fmt.Printf("%t\nerr: %v\nerr3: %v\n\n", bo, err, err3)
-	
+
 	// As
 
-	fmt.Println("errors.As(err2, &err3)")
-	bo = errors.As(err2, &err3)
-	fmt.Printf("%t\nerr3: %v\nerr2: %v\n\n", bo, err3, err2)
+	// fmt.Println("errors.As(err2, &err3)")
+	// bo = errors.As(err2, &err3)
+	// fmt.Printf("%t\nerr3: %v\nerr2: %v\n\n", bo, err3, err2)
 
-	fmt.Println("errors.As(err3, &err2)")
-	bo = errors.As(err3, &err2)
-	fmt.Printf("%t\nerr3: %v\nerr2: %v\n\n", bo, err3, err2)
+	// fmt.Println("errors.As(err3, &err2)")
+	// bo = errors.As(err3, &err2)
+	// fmt.Printf("%t\nerr3: %v\nerr2: %v\n\n", bo, err3, err2)
 
-	file, myerr1 := os.Open("i-do-not-exist")
-	if myerr1 != nil {
-		myerr2 := fmt.Errorf("sono myerr2\n%w", myerr1)
-		var patherr *os.PathError
-		if errors.As(myerr2, &patherr) {
-			fmt.Println(patherr)
-		} else {
-			fmt.Println(":(")
+	file, err := os.Open("i-do-not-exist")
+	if err != nil {
+		var pathErr *os.PathError
+		switch {
+		case errors.As(err, &pathErr):
+			fmt.Printf("%v AS os.PathError{}\n", err)
+		default:
+			fmt.Printf("%v NOT AS os.PathError{}", err)
 		}
 	}
 	defer file.Close()
-
 
 }
